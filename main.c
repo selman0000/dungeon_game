@@ -102,7 +102,7 @@ void printMenu() {
     printf("- pickup <item>: Pick up an item from the room.\n");
     printf("- attack: Fight the monster in the room.\n");
     printf("- inventory: View your inventory.\n");
-    printf("- drink elixir: Drink a health elixir from your inventory.\n"); // New command
+    printf("- drink elixir: Drink a health elixir from your inventory.\n"); 
     printf("- save <filename>: Save the current game state.\n");
     printf("- load <filename>: Load a previously saved game.\n");
     printf("- list: List all saved games.\n");
@@ -217,30 +217,26 @@ void dropItem(Player *p, char *itemName) {
     }
 
     if (itemIndex != -1) {
-        // Add the item to the current room
         Room *currentRoom = &dungeon[p->x][p->y];
         currentRoom->items[currentRoom->itemCount++] = p->inventory[itemIndex];
         printf("You dropped: %s\n", p->inventory[itemIndex].name);
 
-        // Remove the item from the player's inventory
         for (int i = itemIndex; i < p->inventoryCount - 1; i++) {
             p->inventory[i] = p->inventory[i + 1];
         }
-        p->inventoryCount--;  // Decrease inventory count
+        p->inventoryCount--; 
     } else {
         printf("Item not found in your inventory.\n");
     }
 }
 
 
-
-// Attack a monster in the current room
 void attackCreature(Player *p) {
     Room *currentRoom = &dungeon[p->x][p->y];
     if (currentRoom->hasMonster) {
         while (currentRoom->monsterHealth > 0 && p->health > 0) {
-            printf("You attack the monster with %d damage!\n", p->strength);  // Strength now includes weapon damage
-            currentRoom->monsterHealth -= p->strength;  // Apply the damage with the updated strength
+            printf("You attack the monster with %d damage!\n", p->strength);  
+            currentRoom->monsterHealth -= p->strength; 
             if (currentRoom->monsterHealth > 0) {
                 printf("The monster attacks you!\n");
                 p->health -= 10;
@@ -259,7 +255,6 @@ void attackCreature(Player *p) {
 }
 
 
-// Display the player's inventory
 void printInventory(Player *p) {
     if (p->inventoryCount == 0) {
         printf("Your inventory is empty.\n");
@@ -271,7 +266,6 @@ void printInventory(Player *p) {
     }
 }
 
-// Save the current game state
 void saveGame(const char *filepath) {
     FILE *file = fopen(filepath, "wb");
     if (file == NULL) {
@@ -284,7 +278,6 @@ void saveGame(const char *filepath) {
     printf("Game saved to %s.\n", filepath);
 }
 
-// Load a saved game state
 void loadGame(const char *filepath) {
     FILE *file = fopen(filepath, "rb");
     if (file == NULL) {
@@ -299,7 +292,6 @@ void loadGame(const char *filepath) {
 
 void listSavedGames() {
     printf("Listing all files in the current directory:\n");
-    // Windows'ta tüm dosyaları listelemek için dir komutu kullanılıyor
     int result = system("dir /b");
     if (result == -1) {
         printf("Failed to list files.\n");
@@ -307,7 +299,6 @@ void listSavedGames() {
 }
 
 
-// Main function
 int main() {
     char command[50], argument[50];
     initDungeon();
@@ -344,8 +335,8 @@ int main() {
             loadGame(argument);
         } else if (strcmp(command, "list") == 0) {
             listSavedGames();
-        } else if (strcmp(command, "drink") == 0) { // New command for drinking elixir from the room
-            drinkElixir(&player); // Drink from the room
+        } else if (strcmp(command, "drink") == 0) {
+            drinkElixir(&player); 
         } else if (strcmp(command, "exit") == 0) {
             printf("Exiting the game...\n");
             break;
